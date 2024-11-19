@@ -337,6 +337,10 @@ class Strapi implements StrapiI {
     return this.container.get('validators');
   }
 
+  get readOnly() {
+    return this.config.get('readOnly');
+  }
+
   async start() {
     try {
       if (!this.isLoaded) {
@@ -592,7 +596,9 @@ class Strapi implements StrapiI {
       contentTypes: this.contentTypes,
     });
 
-    await this.db.schema.sync();
+    if (!this.readOnly) {
+      await this.db.schema.sync();
+    }
 
     if (this.EE) {
       await ee.checkLicense({ strapi: this });
@@ -603,12 +609,14 @@ class Strapi implements StrapiI {
       contentTypes: this.contentTypes,
     });
 
-    await this.store.set({
-      type: 'strapi',
-      name: 'content_types',
-      key: 'schema',
-      value: this.contentTypes,
-    });
+    if (!this.readOnly) {
+      await this.store.set({
+        type: 'strapi',
+        name: 'content_types',
+        key: 'schema',
+        value: this.contentTypes,
+      });
+    }
 
     await this.startWebhooks();
 
