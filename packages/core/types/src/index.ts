@@ -111,6 +111,7 @@ export interface Strapi {
   db?: Database;
   app: any;
   EE?: boolean;
+  readOnly?: boolean;
   features: FeaturesService;
   components: Shared.Components;
   reload: Reloader;

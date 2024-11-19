@@ -27,6 +27,7 @@ export interface DatabaseConfig {
   connection: Knex.Config;
   settings: Settings;
   models: Model[];
+  readOnly?: boolean;
 }
 
 class Database {
@@ -75,7 +76,21 @@ class Database {
 
     this.schema = createSchemaProvider(this);
 
-    this.migrations = createMigrationsProvider(this);
+    if (this.config.readOnly) {
+      this.migrations = {
+        async shouldRun() {
+          return false;
+        },
+        async up() {
+          return Promise.resolve();
+        },
+        async down() {
+          return Promise.resolve();
+        },
+      };
+    } else {
+      this.migrations = createMigrationsProvider(this);
+    }
     this.lifecycles = createLifecyclesProvider(this);
 
     this.entityManager = createEntityManager(this);

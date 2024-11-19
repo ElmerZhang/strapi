@@ -50,7 +50,9 @@ const syncAuthSettings = async () => {
     newAuthSettings.providers.defaultRole = null;
   }
 
-  await adminStore.set({ key: 'auth', value: newAuthSettings });
+  if (!strapi.readOnly) {
+    await adminStore.set({ key: 'auth', value: newAuthSettings });
+  }
 };
 
 const syncAPITokensPermissions = async () => {

@@ -116,6 +116,7 @@ const createCoreStore = ({ db }: { db: Database }) => {
     const { key, value, type, environment, name, tag } = params;
 
     const prefix = `${type}${name ? `_${name}` : ''}`;
+    console.log('FYDEBUG core store set', { key, type, environment, name, tag, prefix });
 
     const where = {
       key: `${prefix}_${key}`,

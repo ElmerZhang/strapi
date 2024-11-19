@@ -338,7 +338,7 @@ class Strapi implements StrapiI {
   }
 
   get readOnly() {
-    return this.config.get('readOnly');
+    return this.config.get('database.readOnly');
   }
 
   async start() {
